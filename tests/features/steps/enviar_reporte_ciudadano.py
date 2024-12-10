@@ -3,7 +3,7 @@ from app.models.PublicReport import PublicReport
 
 public_reports = []
 
-@step("un ciudadano identifica un problema con un tipo, descripción y ubicación")
+@step("que un ciudadano identifica un problema con un tipo, descripción y ubicación")
 def step_given_basic_problem_details(context):
     context.report = PublicReport(
         report_type="Bache",
@@ -11,7 +11,7 @@ def step_given_basic_problem_details(context):
         location="Calle Principal, 123"
     )
 
-@step("un ciudadano identifica un problema con un tipo, descripción, ubicación y adjunta una foto")
+@step("que un ciudadano identifica un problema con un tipo, descripción, ubicación y adjunta una foto")
 def step_given_problem_with_photo(context):
     context.report = PublicReport(
         report_type="Graffiti",
@@ -20,7 +20,7 @@ def step_given_problem_with_photo(context):
         photo="graffiti.jpg"
     )
 
-@step("un ciudadano intenta enviar un reporte con campos incompletos")
+@step("que un ciudadano intenta enviar un reporte con campos incompletos")
 def step_given_incomplete_report(context):
     context.report = PublicReport(
         report_type=None,
@@ -74,7 +74,7 @@ def step_given_geolocated_problem(context):
     context.report = PublicReport(
         report_type="Árbol caído",
         description="Un árbol cayó y bloquea la calle",
-        location=None  # Se establecerá automáticamente
+        location=None
     )
     context.report.auto_geolocate()
 

@@ -5,43 +5,53 @@ from app.models.CollaborativeRequest import CollaborativeRequest
 
 collaborative_requests = []
 
-@step("un problema interinstitucional ha sido identificado con un tipo, descripción y ubicación")
-def step_given_interinstitutional_problem(context):
-    context.request = CollaborativeRequest(
-        request_type="Inundación",
-        description="Hay una inundación que requiere tanto mantenimiento vial como gestión de desagües",
-        location="Av. Amazonas, 123"
-    )
-
-@step("una institución municipal toma la responsabilidad principal del problema")
-def step_when_primary_entity_assigned(context):
-    context.primary_entity = MunicipalEntity(name="Departamento de Infraestructura")
-    context.request.primary_entity = context.primary_entity
-
-@step("el sistema notifica a las instituciones involucradas")
-def step_then_notify_institutions(context):
-    context.involved_entities = [
-        MunicipalEntity(name="Departamento de Mantenimiento Vial"),
-        MunicipalEntity(name="Departamento de Gestión de Desagües")
-    ]
-    context.request.involved_entities = context.involved_entities
-    for entity in context.involved_entities:
-        print(f"Notificación: El {entity.name} ha sido asignado al problema #{context.request.id}.")
-
-@step("el sistema permite asignar tareas específicas a las instituciones involucradas")
-def step_then_assign_tasks(context):
-    context.request.tasks = {
-        "Departamento de Mantenimiento Vial": "Reparar la vía dañada",
-        "Departamento de Gestión de Desagües": "Drenar el exceso de agua"
+@step("que un problema ha sido reportado con un tipo y ubicación específica")
+def step_given_problem_reported(context):
+    context.problem = {
+        "type": "Inundación",
+        "location": "Av. Principal, 123"
     }
-    for entity, task in context.request.tasks.items():
-        print(f"Tarea asignada: {entity} debe {task}.")
 
-@step("el sistema registra el problema con un estado inicial \"En Proceso de Colaboración\"")
-def step_then_register_collaborative_request(context):
-    context.request.id = len(collaborative_requests) + 1
-    context.request.status = "En Proceso de Colaboración"
-    collaborative_requests.append(context.request)
-    assert context.request in collaborative_requests
-    assert context.request.status == "En Proceso de Colaboración"
-    print(f"Problema #{context.request.id} registrado con estado: {context.request.status}.")
+@step("el sistema detecta que el problema requiere la intervención de más de una institución")
+def step_given_problem_requires_multiple_institutions(context):
+    context.problem["requires_collaboration"] = True
+
+@step("una institución principal toma la responsabilidad del problema")
+def step_when_primary_institution_assigned(context):
+    context.problem["primary_institution"] = "Departamento de Infraestructura"
+
+@step("el sistema debe notificar a las instituciones involucradas")
+def step_then_notify_involved_institutions(context):
+    context.problem["involved_institutions"] = ["Departamento de Mantenimiento", "Departamento de Desagües"]
+    for institution in context.problem["involved_institutions"]:
+        print(f"Notificación enviada a {institution}.")
+
+@step("permitir a la institución principal asignar tareas específicas a las otras instituciones")
+def step_then_allow_task_assignment(context):
+    context.problem["tasks"] = {
+        "Departamento de Mantenimiento": "Reparar la calzada",
+        "Departamento de Desagües": "Drenar el exceso de agua"
+    }
+    assert len(context.problem["tasks"]) == len(context.problem["involved_institutions"])
+
+@step("que un problema ha sido asignado a múltiples instituciones")
+def step_given_problem_assigned(context):
+    assert len(context.problem["involved_institutions"]) > 0
+
+@step("cada institución tiene tareas pendientes asignadas")
+def step_given_tasks_assigned(context):
+    for task in context.problem["tasks"].values():
+        print(f"Tarea asignada: {task}")
+
+@step("una institución actualiza el progreso de su tarea en el sistema")
+def step_when_task_updated(context):
+    context.problem["progress"] = {"Departamento de Mantenimiento": "50% completado"}
+    print("Progreso actualizado.")
+
+@step("el sistema debe registrar el progreso de esa tarea")
+def step_then_register_progress(context):
+    assert "progress" in context.problem
+
+@step("notificar a las otras instituciones involucradas sobre la actualización")
+def step_then_notify_institutions_of_update(context):
+    print("Notificación enviada a instituciones involucradas sobre el progreso actualizado.")

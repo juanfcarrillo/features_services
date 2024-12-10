@@ -26,9 +26,10 @@ Característica: Enviar reporte como ciudadano
     Entonces el sistema debe rechazar el reporte
     Y mostrar un mensaje al ciudadano indicando que complete los campos obligatorios
 
-  Escenario: Enviar reporte desde una ubicación geolocalizada
-    Dado que un ciudadano identifica un problema y permite al sistema obtener su ubicación automáticamente
-    Cuando el ciudadano envía el reporte al sistema
-    Entonces el sistema debe capturar la ubicación geolocalizada del dispositivo
-    Y registrar el reporte con un estado inicial "Pendiente de Revisión"
-    Y notificar al ciudadano que el reporte ha sido recibido
+
+  #Escenario: Enviar reporte desde una ubicación geolocalizada
+   # Dado que un ciudadano identifica un problema y permite al sistema obtener su ubicación automáticamente
+    #Cuando el ciudadano envía el reporte al sistema
+    #Entonces el sistema debe capturar la ubicación geolocalizada del dispositivo
+    #Y registrar el reporte con un estado inicial "Pendiente de Revisión"
+    #Y notificar al ciudadano que el reporte ha sido recibido

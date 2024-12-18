@@ -3,32 +3,35 @@ from app.models.PublicReport import PublicReport
 
 public_reports = []
 
-@step("que un ciudadano identifica un problema con un tipo, descripción y ubicación")
-def step_given_basic_problem_details(context):
+@step('un ciudadano ha identificado un problema con tipo "{tipo}", descripción "{descripcion}" y ubicación "{ubicacion}"')
+def step_given_problem_details(context, tipo, descripcion, ubicacion):
     context.report = PublicReport(
-        report_type="Bache",
-        description="Hay un bache grande en la calle",
-        location="Calle Principal, 123"
+        report_type=tipo,
+        description=descripcion,
+        location=ubicacion
     )
 
-@step("que un ciudadano identifica un problema con un tipo, descripción, ubicación y adjunta una foto")
-def step_given_problem_with_photo(context):
-    context.report = PublicReport(
-        report_type="Graffiti",
-        description="Graffiti en la pared del parque",
-        location="Parque Central",
-        photo="graffiti.jpg"
-    )
-
-@step("que un ciudadano intenta enviar un reporte con campos incompletos")
-def step_given_incomplete_report(context):
+@step('un ciudadano intenta enviar un reporte con descripción "{descripcion}" y ubicación "{ubicacion}" pero sin tipo')
+def step_given_incomplete_problem_details(context, descripcion, ubicacion):
     context.report = PublicReport(
         report_type=None,
-        description="",
-        location="Calle Secundaria, 456"
+        description=descripcion,
+        location=ubicacion
     )
 
-@step("el ciudadano envía el reporte al sistema")
+@step('un ciudadano ha permitido al sistema capturar su ubicación automáticamente')
+def step_given_auto_geolocation(context):
+    context.report.location = "Ubicación geolocalizada automáticamente"
+
+@step('no ha adjuntado ninguna foto como evidencia')
+def step_given_no_photo_attached(context):
+    context.report.photo = None
+
+@step('ha adjuntado una foto como evidencia "{foto}"')
+def step_given_photo_attached(context, foto):
+    context.report.photo = foto
+
+@step('el ciudadano envía el reporte al sistema')
 def step_when_send_report(context):
     if context.report.is_valid():
         context.report.id = len(public_reports) + 1
@@ -37,47 +40,52 @@ def step_when_send_report(context):
     else:
         context.validation_error = "Campos obligatorios faltantes"
 
-@step("el sistema debe asignar un identificador único al reporte")
-def step_then_assign_report_id(context):
+@step('el sistema debe asignar un identificador único al reporte')
+def step_then_assign_unique_id(context):
     assert context.report.id is not None
 
-@step("registrar el reporte con un estado inicial \"Pendiente de Revisión\"")
+@step('registrar el reporte con un estado inicial "Pendiente de Revisión"')
 def step_then_register_report(context):
     assert context.report in public_reports
     assert context.report.status == "Pendiente de Revisión"
 
-@step("almacenar la evidencia fotográfica adjunta junto al reporte")
-def step_then_store_photo(context):
-    if context.report.photo:
-        assert context.report.photo is not None
-
-@step("notificar al ciudadano que el reporte ha sido recibido")
+@step('notificar al ciudadano que el reporte ha sido recibido')
 def step_then_notify_citizen(context):
     print(f"Notificación: El reporte #{context.report.id} ha sido recibido con estado {context.report.status}.")
 
-@step("el sistema valida los datos ingresados")
-def step_when_validate_report(context):
-    context.validation_error = None
-    if not context.report.is_valid():
-        context.validation_error = "Campos obligatorios faltantes"
-
-@step("el sistema debe rechazar el reporte")
+@step('el sistema debe rechazar el reporte')
 def step_then_reject_report(context):
-    assert context.validation_error is not None
+    assert context.report not in public_reports
 
-@step("mostrar un mensaje al ciudadano indicando que complete los campos obligatorios")
+@step('mostrar un mensaje al ciudadano indicando que complete los campos obligatorios')
 def step_then_show_error_message(context):
     print(f"Error: {context.validation_error}")
 
-@step("un ciudadano identifica un problema y permite al sistema obtener su ubicación automáticamente")
-def step_given_geolocated_problem(context):
-    context.report = PublicReport(
-        report_type="Árbol caído",
-        description="Un árbol cayó y bloquea la calle",
-        location=None
-    )
-    context.report.auto_geolocate()
-
-@step("el sistema debe capturar la ubicación geolocalizada del dispositivo")
+@step('el sistema debe capturar la ubicación geolocalizada del dispositivo')
 def step_then_capture_geolocation(context):
     assert context.report.location is not None
+
+@step('un ciudadano ha enviado previamente un reporte con identificador "{id_reporte}"')
+def step_given_existing_report(context, id_reporte):
+    context.report = next((r for r in public_reports if r.id == int(id_reporte)), None)
+    assert context.report is not None
+
+@step('el ciudadano consulta el estado del reporte')
+def step_when_check_report_status(context):
+    context.report_status = context.report.status
+
+@step('el sistema debe mostrar el estado actual "{estado}"')
+def step_then_display_current_status(context, estado):
+    assert context.report_status == estado
+
+@step('el reporte ha pasado de "Pendiente de Revisión" a "En Proceso"')
+def step_given_report_status_change(context):
+    context.report.status = "En Proceso"
+
+@step('el sistema debe notificar al ciudadano sobre el cambio de estado')
+def step_then_notify_status_change(context):
+    print(f"Notificación: El estado del reporte #{context.report.id} ha cambiado a {context.report.status}.")
+
+@step('mostrar información relevante sobre el progreso del problema')
+def step_then_show_progress_info(context):
+    print(f"Progreso: El reporte #{context.report.id} está ahora {context.report.status}.")

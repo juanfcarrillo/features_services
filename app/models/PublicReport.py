@@ -8,8 +8,4 @@ class PublicReport:
         self.status = None
 
     def is_valid(self):
-        return self.report_type and self.description and self.location
-
-    def auto_geolocate(self):
-        # Simulación de captura de ubicación
-        self.location = "Ubicación geolocalizada automáticamente"
+        return bool(self.report_type and self.description and self.location)

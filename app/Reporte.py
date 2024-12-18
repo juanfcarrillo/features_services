@@ -1,14 +1,18 @@
 class Reporte:
     estado_registro: str
-    def __init__(self, tipo, descripcion, ubicacion, foto, ciudadano="Anónimo"):
-        self.tipo = tipo
-        self.descripcion = descripcion
-        self.ubicacion = ubicacion
-        self.foto = foto
+    def __init__(self, ciudadano="Anónimo", **kwargs):
+        if kwargs.get("tipo"):
+            self.tipo = kwargs.get("tipo")
+        if kwargs.get("descripcion"):
+            self.descripcion = kwargs.get("descripcion")
+        if kwargs.get("ubicacion"):
+            self.ubicacion = kwargs.get("ubicacion")
+        if kwargs.get("foto"):
+            self.foto = kwargs.get("foto")
         self.ciudadano = ciudadano
 
     def validar_reporte(self) -> bool:
-        es_valido = bool(self.tipo.strip() and self.descripcion.strip() and self.ubicacion.strip())
+        es_valido = bool(hasattr(self, "tipo") and hasattr(self, "descripcion") and hasattr(self, "ubicacion"))
         return es_valido
 
     def enviar_reporte(self) -> None:

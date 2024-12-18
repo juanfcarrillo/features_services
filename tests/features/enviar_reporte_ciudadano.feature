@@ -15,4 +15,5 @@ Característica: Enviar reporte por parte de un ciudadano
     Ejemplos:
     | tipo         | descripcion               | ubicacion       | foto               |estado_registro|
     | Bache        | Un bache grande           | Calle 123       | foto_bache.jpg     |registrado  |
-
+    | Basura       | Montón de basura          | Parque central  | None                   | registrado      |
+    | None             | Problema no identificado  | Avenida 456     | None                   | no_registrado   |

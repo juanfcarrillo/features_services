@@ -5,10 +5,10 @@ from app.Reporte import Reporte
 @step('que un ciudadano ha proporcionado los siguientes datos: tipo "{tipo}", descripcion "{descripcion}", ubicacion "{ubicacion}", foto "{foto}"')
 def step_given_datos_proporcionados(context, tipo, descripcion, ubicacion, foto):
     reporte = Reporte(
-        tipo=tipo,
-        descripcion=descripcion,
-        ubicacion=ubicacion,
-        foto=foto,
+        tipo=tipo if tipo != "None" else None,
+        descripcion=descripcion if descripcion != "None" else None,
+        ubicacion=ubicacion if ubicacion != "None" else None,
+        foto=foto if foto != "None" else None,
     )
 
     context.reporte = reporte

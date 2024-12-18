@@ -3,7 +3,7 @@ from app.models.PublicReport import PublicReport
 
 public_reports = []
 
-@step('un ciudadano ha identificado un problema con tipo "{tipo}", descripción "{descripcion}" y ubicación "{ubicacion}"')
+@step('que un ciudadano ha identificado un problema de tipo "{tipo}", descripción "{descripcion}" y ubicación "{ubicacion}"')
 def step_given_problem_details(context, tipo, descripcion, ubicacion):
     context.report = PublicReport(
         report_type=tipo,
@@ -11,7 +11,7 @@ def step_given_problem_details(context, tipo, descripcion, ubicacion):
         location=ubicacion
     )
 
-@step('un ciudadano intenta enviar un reporte con descripción "{descripcion}" y ubicación "{ubicacion}" pero sin tipo')
+@step('que un ciudadano intenta enviar un reporte con descripción "{descripcion}" y ubicación "{ubicacion}" pero sin tipo')
 def step_given_incomplete_problem_details(context, descripcion, ubicacion):
     context.report = PublicReport(
         report_type=None,
@@ -19,7 +19,7 @@ def step_given_incomplete_problem_details(context, descripcion, ubicacion):
         location=ubicacion
     )
 
-@step('un ciudadano ha permitido al sistema capturar su ubicación automáticamente')
+@step('ha permitido al sistema capturar su ubicación automáticamente')
 def step_given_auto_geolocation(context):
     context.report.location = "Ubicación geolocalizada automáticamente"
 

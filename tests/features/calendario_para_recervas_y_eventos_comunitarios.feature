@@ -1,7 +1,7 @@
 # Created by shander at 10/12/2024
 # language: es
 
-Característica: : Calendario para recervas y eventos comunitarios
+Característica: Calendario para recervas y eventos comunitarios
 
   Como ciudadano
   cuando necesite recervar un espacio comunitario o programar un evento

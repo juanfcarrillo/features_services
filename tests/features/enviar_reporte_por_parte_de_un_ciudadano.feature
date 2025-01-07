@@ -1,6 +1,3 @@
-# Created by shander at 18/12/2024
-
-# language: es
 
 Característica: Enviar reporte por parte de un ciudadano
 

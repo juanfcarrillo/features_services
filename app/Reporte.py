@@ -1,8 +1,16 @@
+from app.TipoReporte import TipoReporte
+
+
 class Reporte:
     estado_registro: str
-    def __init__(self, ciudadano="Anónimo", **kwargs):
-        if kwargs.get("tipo"):
-            self.tipo = kwargs.get("tipo")
+    frecuencia: str
+    prioridad: int
+
+    def __init__(self, ciudadano="Anónimo", tipo_reporte: TipoReporte=None, **kwargs):
+        if tipo_reporte:
+            self.tipo_reporte = tipo_reporte
+            self.asunto = tipo_reporte.asunto
+            self.prioridad = tipo_reporte.prioridad
         if kwargs.get("descripcion"):
             self.descripcion = kwargs.get("descripcion")
         if kwargs.get("ubicacion"):
@@ -10,9 +18,10 @@ class Reporte:
         if kwargs.get("foto"):
             self.foto = kwargs.get("foto")
         self.ciudadano = ciudadano
+        self.frecuencia = "Desconocida"
 
     def validar_reporte(self) -> bool:
-        es_valido = bool(hasattr(self, "tipo") and hasattr(self, "descripcion") and hasattr(self, "ubicacion"))
+        es_valido = bool(hasattr(self, "asunto") and hasattr(self, "descripcion") and hasattr(self, "ubicacion"))
         return es_valido
 
     def enviar_reporte(self) -> None:

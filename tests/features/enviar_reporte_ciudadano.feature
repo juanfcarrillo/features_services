@@ -1,6 +1,5 @@
 # Created by carla at 12/17/2024
 # language: es
-
 Característica: Enviar reporte por parte de un ciudadano
   Como ciudadano
   Quiero enviar un reporte de un problema en mi comunidad
@@ -13,7 +12,7 @@ Característica: Enviar reporte por parte de un ciudadano
     Y notificar al ciudadano el "<estado_registro>"
 
     Ejemplos:
-    | tipo         | descripcion               | ubicacion       | foto               |estado_registro|
-    | Bache        | Un bache grande           | Calle 123       | foto_bache.jpg     |registrado  |
-    | Basura       | Montón de basura          | Parque central  | None                   | registrado      |
-    | None             | Problema no identificado  | Avenida 456     | None                   | no_registrado   |
+      | tipo   | descripcion              | ubicacion      | foto           | estado_registro |
+      | Bache  | Un bache grande          | Calle 123      | foto_bache.jpg | registrado      |
+      | Basura | Montón de basura         | Parque central | None           | registrado      |
+      | None   | Problema no identificado | Avenida 456    | None           | no_registrado   |

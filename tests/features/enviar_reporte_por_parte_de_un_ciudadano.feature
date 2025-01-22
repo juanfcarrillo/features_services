@@ -1,19 +1,23 @@
+# language: es
 
-Característica: Enviar reporte por parte de un ciudadano
+Característica: Enviar y gestionar reporte por parte de un ciudadano
 
   Como ciudadano
   Quiero enviar un reporte de un problema en mi comunidad
-  Para que las instituciones municipales lo reciban y puedan gestionarlo de manera eficiente.
+  Para que el sistema determine la frecuencia del problema y asigne una prioridad automáticamente en una escala del 1 al 5.
 
-  Esquema del escenario: Enviar un reporte de forma asistida
-    Dado que un ciudadano llamado "<nombre_ciudadano>" con correo "<correo>" e identificación "<identificacion>" está en comunicación con un asistente
-    Y una institución municipal llamada "<nombre_municipio>" con email "<email>"
-    Y el ciudadano proporciona un reporte con asunto "<asunto>", descripción "<descripcion>" y ubicación "<ubicacion>"
-    Cuando el cidudadano termina de dar los detalles y se envía el reporte
-    Entonces se notifica al ciudadano que el reporte fue enviado con éxito
-    Y la institución municipal recibe y guarda el reporte
-    Ejemplos:
-      | nombre_ciudadano | correo             | identificacion | nombre_municipio  | email                     | asunto         | descripcion                                | ubicacion           |
-      | Juan Pérez       | juan@example.com   | 1234567890     | Obras Públicas    | obraspublicas@example.com | Fuga de agua   | Hay una fuga de agua en la calle principal | Calle Principal 123 |
-      | María García     | maria@example.com  | 0987654321     | Alumbrado Público | alumbrado@example.com     | Lámpara rota   | Una lámpara de la calle está rota          | Avenida Central 45  |
-      | Ana Fernández    | ana@example.com    | 9988776655     | Obras Públicas    | obraspublicas@example.com | Calle inundada | Hay una calle inundada tras la lluvia      | Calle Secundaria 89 |
+  Escenario: Enviar un reporte con registro previo del problema
+    Dado que un ciudadano llamado "Juan Pérez" con correo "juan@example.com" e identificación "1234567890" está en comunicación con un asistente
+    Y el ciudadano proporciona un reporte con asunto "Inundación recurrente", descripción "Inundaciones frecuentes en la calle principal" y ubicación "Calle Principal 123"
+    Cuando el ciudadano revisa y confirma los detalles del reporte
+    Entonces el reporte se envía con éxito
+    Y el sistema encuentra registros previos del problema, determina que es recurrente y asigna una prioridad 1
+    Y el ciudadano recibe una confirmación del envío, la frecuencia "Recurrente" y la prioridad "1" del reporte
+
+  Escenario: Enviar un reporte sin registro previo del problema
+    Dado que un ciudadano llamado "Ana Fernández" con correo "ana@example.com" e identificación "9988776655" está en comunicación con un asistente
+    Y el ciudadano proporciona un reporte con asunto "Árbol caído único", descripción "Un árbol cayó por primera vez en la calle" y ubicación "Calle Secundaria 89"
+    Cuando el ciudadano revisa y confirma los detalles del reporte
+    Entonces el reporte se envía con éxito
+    Y el sistema no encuentra registros previos del problema, determina que es único y asigna una prioridad 5
+    Y el ciudadano recibe una confirmación del envío, la frecuencia "Único" y la prioridad "5" del reporte

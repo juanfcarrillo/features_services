@@ -10,7 +10,7 @@ class PrioritizationService:
             report.prioridad = 5
         else:
             report.frecuencia = "Ocasional"
-            report.prioridad = 3:
+            report.prioridad = 3
     @staticmethod
     def determine_frequency_and_priority(report):
         # Simulate checking for existing records

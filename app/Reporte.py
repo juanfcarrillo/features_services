@@ -31,3 +31,5 @@ class Reporte:
             self.estado_registro = "registrado"
         else:
             self.estado_registro = "no_registrado"
+
+

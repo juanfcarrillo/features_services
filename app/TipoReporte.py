@@ -1,13 +1,12 @@
 class TipoReporte:
-    def __init__(self, asunto, descripcion):
+    def __init__(self, asunto: str, descripcion: str):
         self.__asunto = asunto
         self.__descripcion = descripcion
 
-    def _str_(self):
-        return f"Asunto: {self.__asunto}, Descripción: {self.__descripcion}"
-
-    def get_asunto(self):
+    @property
+    def asunto(self):
         return self.__asunto
 
-    def get_descripcion(self):
+    @property
+    def descripcion(self):
         return self.__descripcion

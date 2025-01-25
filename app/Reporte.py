@@ -1,5 +1,5 @@
-from app import Ciudadano
-from app import TipoReporte
+from app.Ciudadano import Ciudadano
+from app.TipoReporte import TipoReporte
 
 
 class Reporte:
@@ -7,39 +7,41 @@ class Reporte:
     def __init__(self, ciudadano: Ciudadano, tipo_reporte: TipoReporte, **kwargs):
         self.__ciudadano = ciudadano
         self.__tipo_reporte = tipo_reporte
+        self.__frecuencia = None
+        self.__prioridad = None
         if kwargs.get("ubicacion"):
             self.__ubicacion = kwargs.get("ubicacion")
-        self.__frecuencia = "Desconocida"
-        self.__prioridad = None
-        self.__estado_registro = "pendiente"
 
     def validar_reporte(self) -> bool:
         es_valido = bool(self.__ciudadano and self.__tipo_reporte and self.__ubicacion)
         return es_valido
 
-    def get_tipo_reporte(self):
-        return self.__tipo_reporte
-
-    def get_ciudadano(self):
+    @property
+    def ciudadano(self):
         return self.__ciudadano
 
-    def set_frecuencia(self, frecuencia):
-        self.__frecuencia = frecuencia
+    @property
+    def tipo_reporte(self):
+        return self.__tipo_reporte
 
-    def get_ubicacion(self):
+    @property
+    def ubicacion(self):
         return self.__ubicacion
 
-    def get_frecuencia(self):
+    @property
+    def frecuencia(self):
         return self.__frecuencia
 
-    def set_prioridad(self, prioridad):
-        self.__prioridad = prioridad
+    @frecuencia.setter
+    def frecuencia(self, frecuencia: str):
+        self.__frecuencia = frecuencia
 
-    def get_prioridad(self):
+    @property
+    def prioridad(self):
         return self.__prioridad
 
-    def get_estado_registro(self):
-        return self.__estado_registro
-
-    def set_estado_registro(self, estado):
-        self.__estado_registro = estado
+    @prioridad.setter
+    def prioridad(self, prioridad: int):
+        if prioridad < 1 or prioridad > 5:
+            raise ValueError("La prioridad debe estar entre 1 y 5.")
+        self.__prioridad = prioridad

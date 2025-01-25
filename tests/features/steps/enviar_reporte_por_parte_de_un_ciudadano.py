@@ -7,8 +7,6 @@ from app.TipoReporte import TipoReporte
 from domain.RepositorioDeReporteEnMemoria import RepositorioDeReporteEnMemoria
 from domain.ServicioDeReporte import ServicioDeReporte
 
-# use_step_matcher("re")
-
 
 repositorioEnMemoria = RepositorioDeReporteEnMemoria()
 servicioDeReporte = ServicioDeReporte(repositorioEnMemoria)
@@ -24,7 +22,6 @@ def generar_registros(repositorio ,cantidad_registro, asunto):
 
         repositorio.agregar_reporte(reporte)
 
-
 @step(
     'que un ciudadano llamado "{nombre}" con correo "{correo}" e identificación "{identificacion}" ha identificado un problema')
 def step_impl(context, nombre, correo, identificacion):
@@ -37,11 +34,9 @@ def step_impl(context, asunto, descripcion, ubicacion):
     context.tipo_reporte = TipoReporte(asunto, descripcion)
     context.reporte = Reporte(context.ciudadano, context.tipo_reporte, ubicacion=ubicacion)
 
-
 @step("se envía el reporte descrito")
 def step_impl(context):
     servicioDeReporte.enviar_reporte(context.reporte)
-
 
 @step('se asigna una prioridad de acuerdo a "{cantidad_registro}" registros previos del problema con asunto "{asunto}"')
 def step_impl(context, cantidad_registro, asunto):
@@ -50,8 +45,7 @@ def step_impl(context, cantidad_registro, asunto):
 
 @step('el reporte es asignado con prioridad "{prioridad_esperada}"')
 def step_impl(context, prioridad_esperada):
-    assert prioridad_esperada == context.reporte.prioridad
-
+    assert int(prioridad_esperada) == context.reporte.prioridad
 
 # @step("el ciudadano recibe una confirmación del envío del reporte")
 # def step_impl(context):

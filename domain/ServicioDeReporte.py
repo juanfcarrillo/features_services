@@ -11,9 +11,9 @@ class ServicioDeReporte:
         cantidad_reportes = len(reportes_previos)
 
         if cantidad_reportes >= 5:
-            reporte.prioridad(1)
+            reporte.prioridad = 1
         else:
-            reporte.prioridad(5)
+            reporte.prioridad = 1
 
         self.reporte_repositorio.actualziar_prioridad_de_reporte_por_asunto(reporte.tipo_reporte.asunto, reporte.prioridad)
 

@@ -7,7 +7,6 @@ from app.TipoReporte import TipoReporte
 from domain.RepositorioDeReporteEnMemoria import RepositorioDeReporteEnMemoria
 from domain.ServicioDeReporte import ServicioDeReporte
 
-
 repositorioEnMemoria = RepositorioDeReporteEnMemoria()
 servicioDeReporte = ServicioDeReporte(repositorioEnMemoria)
 
@@ -46,6 +45,3 @@ def step_impl(context, cantidad_registro, asunto):
 @step('el reporte es asignado con prioridad "{prioridad_esperada}"')
 def step_impl(context, prioridad_esperada):
     assert int(prioridad_esperada) == context.reporte.prioridad
-
-# @step("el ciudadano recibe una confirmación del envío del reporte")
-# def step_impl(context):

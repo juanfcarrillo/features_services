@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.Reporte import Reporte
+from app.models.Reporte import Reporte
 
 
 class RepositorioDeReporte(ABC):

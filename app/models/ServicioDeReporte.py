@@ -1,5 +1,5 @@
-from app.Reporte import Reporte
-from domain.RepositorioDeReporte import RepositorioDeReporte
+from app.models.Reporte import Reporte
+from app.models.RepositorioDeReporte import RepositorioDeReporte
 
 
 class ServicioDeReporte:

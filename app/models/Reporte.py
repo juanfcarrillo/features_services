@@ -1,5 +1,5 @@
-from app.Ciudadano import Ciudadano
-from app.TipoReporte import TipoReporte
+from app.models.Ciudadano import Ciudadano
+from app.models.TipoReporte import TipoReporte
 
 
 class Reporte:

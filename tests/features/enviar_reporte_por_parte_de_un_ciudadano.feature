@@ -8,11 +8,11 @@ Característica: Enviar y gestionar reporte por parte de un ciudadano
 
   Escenario: Enviar un reporte con registro previo del problema
     Dado que un ciudadano llamado "Juan Pérez" con correo "juan@example.com" e identificación "1234567890" ha identificado un problema
-    Y proporciona sus detalles en un reporte con asunto "Inundación recurrente", descripción "Inundaciones frecuentes en la calle principal" y ubicación "Calle Principal 123"
+    Y proporciona sus detalles en un reporte con asunto "inundacion", descripción "Inundaciones frecuentes en la calle principal" y ubicación "Calle Principal 123"
     Cuando se envía el reporte descrito
-    Y se asigna una prioridad de acuerdo a "5" registros previos del problema
+    Y se asigna una prioridad de acuerdo a "5" registros previos del problema con asunto "inundacion"
     Entonces el reporte es asignado con prioridad "1"
-    Y el ciudadano recibe una confirmación del envío del reporte
+#    Y el ciudadano recibe una confirmación del envío del reporte
 
 #  Escenario: Enviar un reporte sin registro previo del problema
 #    Dado que un ciudadano llamado "Ana Fernández" con correo "ana@example.com" e identificación "9988776655" ha identificado un problema

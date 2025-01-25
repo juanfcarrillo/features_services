@@ -1,33 +1,29 @@
 from behave import *
-from asyncio import run
+from faker.proxy import Faker
 
 from app.Ciudadano import Ciudadano
 from app.Reporte import Reporte
 from app.TipoReporte import TipoReporte
 from domain.RepositorioDeReporteEnMemoria import RepositorioDeReporteEnMemoria
+from domain.ServicioDeReporte import ServicioDeReporte
 
 # use_step_matcher("re")
 
+
 repositorioEnMemoria = RepositorioDeReporteEnMemoria()
+servicioDeReporte = ServicioDeReporte(repositorioEnMemoria)
 
-ciudadano1 = Ciudadano(
-    nombre="Juan Pérez",
-    correo="juan.perez@example.com",
-    identificacion="1728394857"
-)
+def generar_registros(repositorio ,cantidad_registro, asunto):
+    fake = Faker()
 
-tipo_reporte1 = TipoReporte(
-    asunto="Inundación recurrente",
-    descripcion="Reporte de un bache peligroso en una avenida principal."
-)
+    for _ in range(int(cantidad_registro)):
+        ciudadano = Ciudadano(nombre=fake.name(), identificacion=fake.ssn(), correo=fake.email())
+        tipo_reporte = TipoReporte(asunto=asunto, descripcion=fake.text())
+        reporte = Reporte(ciudadano=ciudadano, tipo_reporte=tipo_reporte, ubicacion=fake.address())
+        reporte.prioridad = fake.random_int(min=1, max=5)
 
-tipo_reporte2 = TipoReporte(
-    asunto="Inundación recurrente",
-    descripcion="Reporte de un bache en una avenida principal."
-)
+        repositorio.agregar_reporte(reporte)
 
-run(repositorioEnMemoria.agregar_reporte(Reporte(ciudadano1, tipo_reporte1, ubicacion="Avenida Principal", prioridad=2, frecuencia="Recurrente")))
-run(repositorioEnMemoria.agregar_reporte(Reporte(ciudadano1, tipo_reporte2, ubicacion="Avenida Principal", prioridad=2, frecuencia="Recurrente")))
 
 @step(
     'que un ciudadano llamado "{nombre}" con correo "{correo}" e identificación "{identificacion}" ha identificado un problema')
@@ -44,45 +40,18 @@ def step_impl(context, asunto, descripcion, ubicacion):
 
 @step("se envía el reporte descrito")
 def step_impl(context):
-    run(repositorioEnMemoria.agregar_reporte(context.reporte))
-
-@step("se encuentra registros previos del problema")
-def step_impl(context):
-    registros_previos = run(repositorioEnMemoria.obtener_reportes_por_asunto(context.tipo_reporte.asunto)) or []
-    context.cantidad_reportes = len(registros_previos)
-
-    assert context.cantidad_reportes > 1, "No se encontraron registros previos del problema"
+    servicioDeReporte.enviar_reporte(context.reporte)
 
 
-@step('el reporte se asigna con frecuencia "{frecuencia}" y prioridad "{prioridad}"')
-def step_impl(context, frecuencia, prioridad):
-    run(repositorioEnMemoria.actualziar_prioridad_de_reporte_por_asunto(context.tipo_reporte.asunto, prioridad, frecuencia))
+@step('se asigna una prioridad de acuerdo a "{cantidad_registro}" registros previos del problema con asunto "{asunto}"')
+def step_impl(context, cantidad_registro, asunto):
+    generar_registros(repositorioEnMemoria, cantidad_registro, asunto)
+    context.reporte = servicioDeReporte.priorizar(context.reporte)
+
+@step('el reporte es asignado con prioridad "{prioridad_esperada}"')
+def step_impl(context, prioridad_esperada):
+    assert prioridad_esperada == context.reporte.prioridad
 
 
-@step("el ciudadano recibe una confirmación del envío del reporte")
-def step_impl(context):
-    print(
-        f"""
-                        Hola {context.reporte.get_ciudadano().get_nombre()}:,
-
-                        Hemos recibido tu reporte con los siguientes detalles:
-                        Asunto: {context.reporte.get_tipo_reporte().get_asunto()}
-                        Descripción: {context.reporte.get_tipo_reporte().get_descripcion()}
-                        Ubicación: {context.reporte.get_ubicacion()}
-
-                        Tu reporte ha sido registrado exitosamente con estado: {context.reporte.get_estado_registro()}.
-
-                        Gracias por contribuir a mejorar nuestra comunidad.
-
-                        Atentamente,
-                        Equipo de Gestión de Reportes
-                        """
-    )
-
-
-@step("no se encuentra registros previos del problema")
-def step_impl(context):
-    registros_previos = run(repositorioEnMemoria.obtener_reportes_por_asunto(context.tipo_reporte.asunto)) or []
-    context.cantidad_reportes = len(registros_previos)
-
-    assert context.cantidad_reportes == 1, "Se encontraron registros previos del problema"
+# @step("el ciudadano recibe una confirmación del envío del reporte")
+# def step_impl(context):

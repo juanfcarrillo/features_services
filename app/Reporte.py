@@ -7,7 +7,6 @@ class Reporte:
     def __init__(self, ciudadano: Ciudadano, tipo_reporte: TipoReporte, **kwargs):
         self.__ciudadano = ciudadano
         self.__tipo_reporte = tipo_reporte
-        self.__frecuencia = None
         self.__prioridad = None
         if kwargs.get("ubicacion"):
             self.__ubicacion = kwargs.get("ubicacion")
@@ -27,14 +26,6 @@ class Reporte:
     @property
     def ubicacion(self):
         return self.__ubicacion
-
-    @property
-    def frecuencia(self):
-        return self.__frecuencia
-
-    @frecuencia.setter
-    def frecuencia(self, frecuencia: str):
-        self.__frecuencia = frecuencia
 
     @property
     def prioridad(self):
